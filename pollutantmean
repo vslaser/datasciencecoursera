@@ -1,0 +1,20 @@
+pollutantmean = function(directory, pollutant, id = 1:332){ 
+    setwd(paste("/home/vijay/datasciencecoursera/", directory, sep = "")) 
+  ## The working directory has been set to the folder within my pc
+                
+    fulldata = do.call("rbind", lapply( list.files(getwd(),full=TRUE),read.csv, header=TRUE))
+    
+  ## I obtained the list of all files in the working directory
+  ## The lapply is then applied on the list against read.csv function inluding headers
+  ## by do.call, i am calling rbind and the lapply thereby binding the data into 1 dataframe
+    
+    req = subset(fulldata, ID %in% id)
+  ##This is the subset required for the function that is being run. We need mean of this data
+    
+    reqmean = mean(req[,pollutant], na.rm = TRUE)
+  ## Calculating the mean of the column within required subset for the pollutant column 
+  ## NA are removed
+    
+    reqmean
+  ## Printing the results. 
+}
