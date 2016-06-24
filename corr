@@ -1,0 +1,26 @@
+corr = function(directory, threshold = 0){
+  setwd(paste("/home/vijay/datasciencecoursera/", directory, sep = "")) 
+  ## The working directory has been set to the folder within my pc
+  
+  fulldata = do.call("rbind", lapply( list.files(getwd(),full=TRUE),read.csv, header=TRUE))
+  
+  ## I obtained the list of all files in the working directory
+  ## The lapply is then applied on the list against read.csv function inluding headers
+  ## by do.call, i am calling rbind and the lapply thereby binding the data into 1 dataframe
+  
+  output = vector(mode = "numeric", length = 0)
+  
+  for(i in 1:length(list.files(getwd(),full=TRUE))){
+      req = subset(fulldata, ID == i)
+      pollutantsum = sum(!is.na(req$sulfate) & !is.na(req$nitrate))
+      
+      if(pollutantsum > threshold){
+          sulfnarem = req[which(!is.na(req$sulfate)), ]
+          bothnarem = sulfnarem[which(!is.na(sulfnarem$nitrate)), ]
+          output = c(output, cor(bothnarem$sulfate, bothnarem$nitrate))
+        }
+  }
+  
+  output
+  
+}
